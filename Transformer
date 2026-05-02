@@ -1,0 +1,40 @@
+import numpy as np
+
+# Example sentence tokens
+tokens = ["what", "are", "the", "symptoms", "of", "diabetes", "?"]
+
+# Step 1: Create random embeddings (for demo)
+np.random.seed(42)
+d_model = 8
+embeddings = np.random.rand(len(tokens), d_model)
+
+# Step 2: Initialize weight matrices
+W_Q = np.random.rand(d_model, d_model)
+W_K = np.random.rand(d_model, d_model)
+W_V = np.random.rand(d_model, d_model)
+
+# Step 3: Compute Q, K, V
+Q = embeddings @ W_Q
+K = embeddings @ W_K
+V = embeddings @ W_V
+
+# Step 4: Compute attention scores
+scores = Q @ K.T
+
+# Step 5: Scale scores
+d_k = K.shape[-1]
+scaled_scores = scores / np.sqrt(d_k)
+
+# Step 6: Softmax function
+def softmax(x):
+    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+
+attention_weights = softmax(scaled_scores)
+
+# Step 7: Compute final output
+output = attention_weights @ V
+
+# Print results
+print("Attention Weights:\n", attention_weights)
+print("\nSelf-Attention Output:\n", output)
